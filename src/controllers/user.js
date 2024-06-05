@@ -68,7 +68,7 @@ exports.login = async (req, res, next) => {
       jwt_secret,
       { expiresIn: "1h" }
     );
-    res.cookie("token", token, { httpOnly: true, sameSite: "Strict", secure: false });
+    res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true });
     res.status(200).json({
       user: {
         id: user._id,
