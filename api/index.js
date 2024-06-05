@@ -20,7 +20,7 @@ const MONGODB_URL = process.env.DB_CONNECT;
 
 // Setting up server
 app.use(cors({
-  origin: 'http://localhost:3000', // Địa chỉ frontend
+  origin: 'https://shop-client-nine.vercel.app/', // Địa chỉ frontend
   credentials: true, // Cho phép gửi cookie
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
