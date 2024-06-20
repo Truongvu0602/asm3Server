@@ -12,11 +12,11 @@ require("dotenv").config();
 // Mongoose
 const mongoose = require("mongoose");
 // Routes imports
-const productRoutes = require("../src/routes/client/product");
-const userRoutes = require("../src/routes/client/user");
-const cartRoutes = require("../src/routes/client/cart");
-const adminRoutes = require("../src/routes/admin/index");
-const orderRoutes = require("../src/routes/client/order");
+const productRoutes = require("./src/routes/client/product");
+const userRoutes = require("./src/routes/client/user");
+const cartRoutes = require("./src/routes/client/cart");
+const orderRoutes = require("./src/routes/client/order");
+const adminRoutes = require("./src/routes/admin/index");
 
 // CONSTANTS
 const MONGODB_URL = process.env.DB_CONNECT;
@@ -124,7 +124,7 @@ mongoose
     const server = app.listen(port, () =>
       console.log(`Server running on port ${port}`)
     );
-    require("../socket").init(server);
+    require("./socket").init(server);
   })
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
