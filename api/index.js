@@ -22,13 +22,23 @@ const orderRoutes = require("../src/routes/client/order");
 const MONGODB_URL = process.env.DB_CONNECT;
 
 // Setting up server
-app.use(cors({
-  origin: ['https://shop-client-nine.vercel.app/', 'https://shopping-admin-five.vercel.app/'], // Địa chỉ frontend
-  credentials: true, // Cho phép gửi cookie
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+const allowedOrigins = ['https://shop-client-nine.vercel.app/', 'https://shopping-admin-five.vercel.app/'];
 
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Check if the origin is in the allowed list
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+
 // Allow cors headers
 
 app.use(cookieParser());
