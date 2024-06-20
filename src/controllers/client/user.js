@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const User = require("../models/user");
+const User = require("../../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -64,16 +64,23 @@ exports.login = async (req, res, next) => {
         _id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role
       },
       jwt_secret,
       { expiresIn: "1h" }
     );
-    res.cookie("token", token, { httpOnly: true, sameSite: "Strict", secure: false });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      maxAge: 1000 * 60 * 60,
+    });
     res.status(200).json({
       user: {
         id: user._id,
         username: user.username,
         email: user.email,
+        test: "123123"
       },
       message: "Login successfully",
     });
@@ -101,14 +108,22 @@ exports.checkauth = async (req, res, next) => {
     res.status(200).json({ user: req.userData });
   } catch (error) {
     console.log(error);
+    if (error.message.includes("jwt expired")) {
+      {
+        error.message = "Token expired";
+        error.status = 401;
+      }
+    }
     if (!error.status) {
       error.status = 500;
       error.message = "Something went wrong!";
     }
     next(error);
   }
-}
+};
 
 exports.logOut = (req, res, next) => {
-  return res.clearCookie("token").json({status: 200, message: "Logout successfully" });
-}
+  return res
+    .clearCookie("token")
+    .json({ status: 200, message: "Logout successfully" });
+};

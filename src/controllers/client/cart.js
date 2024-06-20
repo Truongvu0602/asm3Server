@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
-const Cart = require("../models/cart");
-const User = require("../models/user");
-const Product = require("../models/product");
+const Cart = require("../../models/cart");
+const User = require("../../models/user");
+const Product = require("../../models/product");
 
 exports.editCartItem = async (req, res, next) => {
   const productId = req.body.productId;
@@ -10,7 +10,9 @@ exports.editCartItem = async (req, res, next) => {
 
   try {
     // Get user's order
-    let userCart = await Cart.findOne({ user: userId }).populate("products.product").exec();
+    let userCart = await Cart.findOne({ user: userId })
+      .populate("products.product")
+      .exec();
     // If not existed, create new Cart.
     if (!userCart) {
       if (quantity > 0) {
@@ -41,9 +43,12 @@ exports.editCartItem = async (req, res, next) => {
         userCart.products[existedProduct].quantity += quantity;
         if (userCart.products[existedProduct].quantity <= 0) {
           userCart.products.splice(existedProduct, 1);
-        } else if(userCart.products[existedProduct].quantity > 0 && quantity > 1) {
+        } else if (
+          userCart.products[existedProduct].quantity > 0 &&
+          quantity > 1
+        ) {
           userCart.products[existedProduct].quantity = quantity;
-        } else if(quantity === 0) {
+        } else if (quantity === 0) {
           userCart.products.splice(existedProduct, 1);
         }
       } else {
@@ -70,7 +75,9 @@ exports.editCartItem = async (req, res, next) => {
       await userCart.save();
     }
     await userCart.save();
-    userCart = await Cart.findOne({ user: userId }).populate("products.product").exec();
+    userCart = await Cart.findOne({ user: userId })
+      .populate("products.product")
+      .exec();
     res.status(200).json({ userCart: userCart, status: 200 });
   } catch (error) {
     console.log(error);
@@ -88,7 +95,9 @@ exports.getCartByUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ status: 404, message: "User not found" });
     }
-    let userCart = await Cart.findOne({ user: userId }).populate("products.product").exec();
+    let userCart = await Cart.findOne({ user: userId })
+      .populate("products.product")
+      .exec();
     if (!userCart) {
       res.status(200).json({
         userCart: {
@@ -112,16 +121,20 @@ exports.removeCartItem = async (req, res, next) => {
   const userId = req.userData._id;
   try {
     // Get user's order
-    const userCart = await Cart.findOne({user: userId}).populate("products.product").exec();
+    const userCart = await Cart.findOne({ user: userId })
+      .populate("products.product")
+      .exec();
     if (!userCart) {
-      return res.status(404).json({ status: 404, message: "Cant find user's order !" });
-    };
-    
+      return res
+        .status(404)
+        .json({ status: 404, message: "Cant find user's order !" });
+    }
+
     const itemToRemove = userCart.products.findIndex((product) => {
       return product.product._id.toString() === productId;
     });
 
-    console.log(itemToRemove)
+    console.log(itemToRemove);
 
     if (itemToRemove > -1) {
       userCart.products.splice(itemToRemove, 1);
@@ -131,7 +144,5 @@ exports.removeCartItem = async (req, res, next) => {
     } else {
       res.status(404).json({ status: 404, message: "Cant find item" });
     }
-    
   } catch (error) {}
 };
-                 

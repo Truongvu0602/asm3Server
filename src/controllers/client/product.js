@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Product = require("../models/product");
+const Product = require("../../models/product");
 
 exports.getProducts = async (req, res, next) => {
   try {
@@ -23,7 +23,7 @@ exports.getProductById = async (req, res, next) => {
       product: product,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     const err = new Error("Can not find product!");
     err.status = 404;
     next(err);
@@ -34,18 +34,16 @@ exports.getProductsByCategory = async (req, res, next) => {
   const category = req.params.category;
 
   try {
-    const products =  await Product.find({category: category});
+    const products = await Product.find({ category: category });
 
     res.status(200).json({
       products: products,
       status: 200,
     });
-    
   } catch (error) {
     console.log(error);
     const err = new Error("Can not find products or category!");
     err.status = 404;
     next(err);
   }
-
-}
+};

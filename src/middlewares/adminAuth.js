@@ -5,12 +5,18 @@ const auth = (req, res, next) => {
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userData = decoded;
-    next();
+    if (req.userData.role == "user") {
+      res.status(401).json({
+        message: "Not authenticated!",
+      });
+    } else {
+      next();
+    }
   } catch (error) {
     console.log(error);
     res.status(401).json({
       message: "Not authenticated!",
-      status: 401
+      status: 401,
     });
   }
 };

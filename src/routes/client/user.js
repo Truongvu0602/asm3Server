@@ -1,11 +1,11 @@
 const express = require("express");
 const Router = express.Router();
 // Controller
-const userController = require("../controllers/user");
+const userController = require("../../controllers/client/user");
 // Validation
 const { body } = require("express-validator");
-const User = require("../models/user");
-const auth = require("../middlewares/auth");
+const User = require("../../models/user");
+const auth = require("../../middlewares/auth");
 
 // POST
 
@@ -28,7 +28,9 @@ Router.post(
           throw new Error("Email already exists");
         }
       }),
-    body("phone").isMobilePhone().withMessage("Please provide a valid phone number"),
+    body("phone")
+      .isMobilePhone()
+      .withMessage("Please provide a valid phone number"),
   ],
   userController.signup
 );
@@ -40,7 +42,7 @@ Router.post(
     body("email").not().isEmpty().isEmail().withMessage("Email is not valid!"),
     body("password")
       .isLength({ min: 6 })
-      .withMessage("Password must be at least 6 characters")
+      .withMessage("Password must be at least 6 characters"),
   ],
   userController.login
 );
@@ -49,6 +51,6 @@ Router.post(
 Router.get("/auth", userController.checkauth);
 
 // User log out
-Router.get("/logout",auth ,userController.logOut);
+Router.get("/logout", auth, userController.logOut);
 
 module.exports = Router;
