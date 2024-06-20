@@ -29,8 +29,8 @@ exports.login = async (req, res, next) => {
       error.status = 422;
       throw error;
     }
-    // Check if user is admin
-    if (user.role !== "admin") {
+    // Check if user is admin / staff
+    if (user.role !== "admin" && user.role !== "staff") {
       const error = new Error("You don't have permission to login this site!");
       error.status = 401;
       throw error;
@@ -58,18 +58,16 @@ exports.login = async (req, res, next) => {
       maxAge: 1000 * 60 * 60,
     });
 
-    res
-      .status(200)
-      .json({
-        user: {
-          _id: user._id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          phone: user.phone,
-        },
-        message: "Login successfully",
-      });
+    res.status(200).json({
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+      },
+      message: "Login successfully",
+    });
   } catch (error) {
     console.log(error);
     if (!error.status) {
@@ -95,8 +93,5 @@ exports.adminAuth = (req, res, next) => {
 };
 
 exports.logOut = (req, res, next) => {
-  return res
-    .clearCookie("token")
-    .status(200)
-    .json({ message: "Logout successfully" });
+  return res.clearCookie("token", { sameSite: "none", secure: true , httpOnly: true }).json({ status: 200, message: "Logout successfully" });
 };
