@@ -69,7 +69,7 @@ exports.login = async (req, res, next) => {
       jwt_secret,
       { expiresIn: "1h" }
     );
-    res.cookie("token", token, { httpOnly: true, sameSite: "Strict", secure: false });
+    res.cookie("token", token, { httpOnly: true, sameSite: "Strict", secure: false, maxAge: 60 * 60 * 1000 });
     res.status(200).json({
       user: {
         id: user._id,
