@@ -22,7 +22,7 @@ const orderRoutes = require("../src/routes/client/order");
 const MONGODB_URL = process.env.DB_CONNECT;
 
 // Setting up server
-const allowedOrigins = ['https://shop-client-nine.vercel.app/', 'https://shopping-admin-five.vercel.app/'];
+const allowedOrigins = ['https://shop-client-nine.vercel.app', 'https://shopping-admin-five.vercel.app'];
 
 app.use(
   cors({
