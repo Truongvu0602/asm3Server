@@ -68,7 +68,7 @@ app.use("/user", userRoutes);
 app.use("/cart", cartRoutes);
 app.use("/order", orderRoutes);
 
-app.get("/", (req, res) => res.send("ExpressJS on Vercel!"));
+app.get("/", (req, res) => res.send("ExpressJS on Deploy!"));
 
 // 404 handler
 app.use((req, res, next) => {
