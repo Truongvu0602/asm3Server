@@ -93,5 +93,7 @@ exports.adminAuth = (req, res, next) => {
 };
 
 exports.logOut = (req, res, next) => {
-  return res.clearCookie("token", { sameSite: "none", secure: true , httpOnly: true }).json({ status: 200, message: "Logout successfully" });
+  return res
+    .clearCookie("token", { sameSite: "none", secure: true, httpOnly: true })
+    .json({ status: 200, message: "Logout successfully" });
 };

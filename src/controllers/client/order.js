@@ -20,20 +20,44 @@ exports.createOrder = async (req, res, next) => {
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;
+  // Validate phone and email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^0\d{9,10}$/;
 
-  // Check if all required fields exist
-  if (!userCart || !orderTotalPrice || !address) {
-    res.status(400).json({
+  if (!name || !email || !phone || !address || !userCart || !orderTotalPrice) {
+    return res.status(400).json({
       status: 400,
-      message: "Missing required fields to create order",
+      message: "Thiếu thông tin đơn hàng (tên, email, sđt, địa chỉ...)",
     });
   }
+
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Email không hợp lệ",
+    });
+  }
+
+  if (!phoneRegex.test(phone)) {
+    return res.status(400).json({
+      status: 400,
+      message: "Số điện thoại không hợp lệ (bắt đầu bằng 0, dài 10-11 số)",
+    });
+  }
+
+  // // Check if all required fields exist
+  // if (!userCart || !orderTotalPrice || !address) {
+  //   res.status(400).json({
+  //     status: 400,
+  //     message: "Missing required fields to create order",
+  //   });
+  // }
 
   // Decrease stock of products in cart
   userCart.forEach(async (cartItem) => {
     // Check if product is out of stock
     const product = await Product.findById(cartItem.product._id);
-    if(Number(product.stock) === 0) {
+    if (Number(product.stock) === 0) {
       res.status(400).json({
         status: 400,
         message: "Product is out of stock",
@@ -43,7 +67,7 @@ exports.createOrder = async (req, res, next) => {
     if (!product) {
       res.status(404).json({ status: 404, message: "Product not found" });
     }
-    
+
     // Check if stock is enough for order
     if (Number(product.stock) < cartItem.quantity) {
       res.status(400).json({
