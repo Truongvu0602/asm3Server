@@ -105,6 +105,7 @@ const allowedOrigins = [
   "http://localhost:3001",
   "http://127.0.0.1:3001",
   "https://stalwart-sunburst-1721e0.netlify.app",
+  "https://asm3adnodejs.netlify.app",
 ];
 
 app.use(
@@ -126,11 +127,11 @@ app.use(
 );
 
 // ✅ 2. Middleware cơ bản
-app.use(cookieParser());
-app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
 // ✅ 3. Static folder
 app.use("/images", express.static(path.join(__dirname, "images")));
 
