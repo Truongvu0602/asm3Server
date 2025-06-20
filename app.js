@@ -174,14 +174,14 @@ app.use((req, res, next) => {
   next(error);
 });
 
-// ✅ 9. Error Handler (BẮT BUỘC phải gửi CORS trong response lỗi)
-app.use((err, req, res, next) => {
-  console.error("🔥 Error:", err.message);
-  res.setHeader("Access-Control-Allow-Origin", "*"); // <-- fix CORS với lỗi
-  const status = err.status || 500;
-  const message = err.message || "Internal Server Error";
-  res.status(status).json({ status, message });
-});
+// // ✅ 9. Error Handler (BẮT BUỘC phải gửi CORS trong response lỗi)
+// app.use((err, req, res, next) => {
+//   console.error("🔥 Error:", err.message);
+//   res.setHeader("Access-Control-Allow-Origin", "*"); // <-- fix CORS với lỗi
+//   const status = err.status || 500;
+//   const message = err.message || "Internal Server Error";
+//   res.status(status).json({ status, message });
+// });
 
 // ✅ Error Handler
 app.use((err, req, res, next) => {
