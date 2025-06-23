@@ -4,6 +4,7 @@ const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
 
 exports.login = async (req, res, next) => {
+  console.log(">>> BODY:", req.body);
   const { email, password } = req.body;
 
   try {
